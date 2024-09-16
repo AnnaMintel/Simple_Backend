@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
+import bodyParser from 'body-parser'
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 const products = [
   { id: 1, title: "tomato" },
@@ -11,6 +12,10 @@ const addresses = [
   { id: 1, value: "Pritytskogo 12" },
   { id: 2, value: "Matusevicha 40" },
 ];
+
+// middleware to parse data from req body(json) to javaScript object
+const parserMiddleware = bodyParser.json({})
+app.use(parserMiddleware)
 
 //GET
 // query params
@@ -57,11 +62,13 @@ app.delete("/products/:id", (req: Request, res: Response) => {
 });
 
 //POST
-
+app.post("/products", (req: Request, res: Response) => {
+  const newProduct = { id: +new Date(), title: req.body.title };
+  products.push(newProduct);
+  res.sendStatus(201).send(newProduct);
+});
 
 //PUT
-
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
