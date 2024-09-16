@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import bodyParser from 'body-parser'
+import bodyParser from "body-parser";
 
 const app = express();
 const port = 3001;
@@ -14,8 +14,8 @@ const addresses = [
 ];
 
 // middleware to parse data from req body(json) to javaScript object
-const parserMiddleware = bodyParser.json({})
-app.use(parserMiddleware)
+const parserMiddleware = bodyParser.json({});
+app.use(parserMiddleware);
 
 //GET
 // query params
@@ -69,6 +69,15 @@ app.post("/products", (req: Request, res: Response) => {
 });
 
 //PUT
+app.put("/products/:id", (req: Request, res: Response) => {
+  const product = products.find((el) => el.id === +req.params.id);
+  if (product) {
+    product.title = req.body.title;
+    res.send(product);
+  } else {
+    res.sendStatus(404);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
